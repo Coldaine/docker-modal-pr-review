@@ -1,0 +1,79 @@
+name: Docker + Modal PR Reviewer (Spike)
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'PR number to review'
+        required: true
+        type: string
+      repo:
+        description: 'Target repository (owner/name)'
+        required: false
+        default: 'MooseGooseConsulting/coldaine-codeOps'
+        type: string
+      mode:
+        description: 'Execution mode'
+        type: choice
+        options:
+          - prepare-only
+          - tool-smoke
+          - review
+        default: review
+      publish:
+        description: 'Publish review comment to GitHub PR'
+        type: boolean
+        default: false
+      force:
+        description: 'Force re-review even if already reviewed'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    name: "PR Review Spike (#${{ inputs.pr }})"
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      DOCKER_ID: ${{ secrets.DOCKER_ID }}
+      DOCKER_PAT: ${{ secrets.DOCKER_PAT }}
+      MODAL_PROXY_TOKEN: ${{ secrets.MODAL_PROXY_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      MODAL_MODE: shared
+      MODEL_BASE_URL: https://inference.us-west.modal.direct/v1
+      MODEL_ID: deepseek/deepseek-v4.1-flash
+      MODEL_CONTEXT_TOKENS: '131072'
+      MODEL_OUTPUT_TOKENS: '16384'
+    steps:
+      - name: Checkout spike runner
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run PR review controller
+        run: |
+          node src/controller.mjs \
+            --pr "${{ inputs.pr }}" \
+            --repo "${{ inputs.repo }}" \
+            --mode "${{ inputs.mode }}" \
+            --publish "${{ inputs.publish }}" \
+            --force "${{ inputs.force }}"
+
+      - name: Upload review artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: review-pr-${{ inputs.pr }}-run-${{ github.run_id }}
+          path: output/
+          retention-days: 30

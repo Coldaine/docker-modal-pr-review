@@ -1,0 +1,29 @@
+# Secrets and environment files
+.env
+.env.*
+*.env
+*.pem
+*.key
+
+# Doppler configuration
+doppler.yaml
+
+# Node.js dependencies and output
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Spike execution outputs and logs
+output/
+*.log
+scratch/
+tmp/
+temp/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

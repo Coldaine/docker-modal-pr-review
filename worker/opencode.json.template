@@ -1,0 +1,43 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "modal/deepseek-v4-1-flash",
+  "providers": {
+    "modal": {
+      "name": "Modal Shared Endpoint",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "baseURL": "{{MODEL_BASE_URL}}"
+      },
+      "headers": {
+        "Modal-Session-Id": "{{MODAL_SESSION_ID}}",
+        "Authorization": "Bearer {{MODAL_PROXY_TOKEN}}"
+      },
+      "models": {
+        "deepseek-v4-1-flash": {
+          "name": "DeepSeek V4.1 Flash",
+          "modelID": "{{MODEL_ID}}",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "limit": {
+            "context": {{MODEL_CONTEXT_TOKENS}},
+            "output": {{MODEL_OUTPUT_TOKENS}}
+          }
+        }
+      }
+    }
+  },
+  "permissions": [
+    {
+      "action": "*",
+      "resource": "*",
+      "effect": "allow"
+    }
+  ]
+}
