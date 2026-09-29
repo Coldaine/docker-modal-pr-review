@@ -27,7 +27,7 @@ export function renderOpenCodeConfig({
   templateContent,
   templatePath = DEFAULT_TEMPLATE_PATH,
   baseUrl = 'https://inference.us-west.modal.direct/v1',
-  modelId = 'deepseek/deepseek-v4.1-flash',
+  modelId = 'deepseek-v4-1-flash',
   contextTokens = 131072,
   outputTokens = 16384,
   sessionId,

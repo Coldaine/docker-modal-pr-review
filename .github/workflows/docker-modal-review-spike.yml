@@ -45,7 +45,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       MODAL_MODE: shared
       MODEL_BASE_URL: https://inference.us-west.modal.direct/v1
-      MODEL_ID: deepseek/deepseek-v4.1-flash
+      MODEL_ID: deepseek-v4-1-flash
       MODEL_CONTEXT_TOKENS: '131072'
       MODEL_OUTPUT_TOKENS: '16384'
     steps:
