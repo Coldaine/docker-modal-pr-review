@@ -44,8 +44,8 @@ jobs:
       MODAL_PROXY_TOKEN: ${{ secrets.MODAL_PROXY_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       MODAL_MODE: shared
-      MODEL_BASE_URL: https://inference.us-west.modal.direct/v1
-      MODEL_ID: deepseek-v4-1-flash
+      MODEL_BASE_URL: https://pmaclyman--ep-deepseek-v4-1-flash-shared-server.us-west.modal.direct/v1
+      MODEL_ID: deepseek-ai/DeepSeek-V4.1-Flash
       MODEL_CONTEXT_TOKENS: '131072'
       MODEL_OUTPUT_TOKENS: '16384'
     steps:

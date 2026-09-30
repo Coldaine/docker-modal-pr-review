@@ -1,12 +1,17 @@
 # Docker + Modal PR Reviewer Spike: Operational Runbook
 
+## Current inference backend
+
+Shared DeepSeek V4.1 Flash is live and directly verified (HTTP 200, `PONG`, 3 output tokens). See [SHARED-INFERENCE.md](SHARED-INFERENCE.md) for the active URL, bounded smoke command, workspace usage-limit change and credit eligibility boundaries. Repository default changes are pending in [PR #1](https://github.com/Coldaine/docker-modal-pr-review/pull/1); the live Shared endpoint already works. Older Dedicated endpoint operations below are historical.
+
+
 This runbook documents the operational commands, credential configuration, step-by-step verification ladder, failure triage, and promotion path for the Docker Cloud Sandboxes + Modal DeepSeek V4.1 Flash PR reviewer spike.
 
 ---
 
 ## 1. System & Architecture Overview
 
-The system executes an automated, high-assurance review of GitHub pull requests inside ephemeral, isolated Docker Cloud Sandboxes powered by DeepSeek V4.1 Flash hosted on Modal Dedicated Endpoints.
+The system executes an automated, high-assurance review of GitHub pull requests inside ephemeral, isolated Docker Cloud Sandboxes powered by DeepSeek V4.1 Flash hosted on Modal Shared Endpoints.
 
 ```text
 GitHub Actions / Local CLI (via Doppler)
@@ -86,33 +91,17 @@ doppler secrets get MODAL_PROXY_TOKEN --plain | gh secret set MODAL_PROXY_TOKEN 
 
 ---
 
-## 4. Modal Dedicated Endpoint Operations
+## 4. Modal Shared Endpoint Operations
 
-### Why Dedicated Endpoints?
-Modal promotional credits ($280 included with plan) **cannot** be applied to Shared Endpoints (which bill per token to credit cards). Dedicated Endpoints bill standard GPU compute hours and **fully draw down promotional/plan credits**.
+The active inference backend is `deepseek-v4-1-flash-shared` (`ep-wJ72EAwFPdMhsTLlqV6QNh`), serving `deepseek-ai/DeepSeek-V4.1-Flash` at:
 
-### Active Endpoint Details
-- **Endpoint Name**: `deepseek-v4-1-flash`
-- **Endpoint ID**: `ep-hhM27zkXHw4l2a8c3fW1Bw`
-- **Base Model**: `deepseek-ai/DeepSeek-V4.1-Flash`
-- **Pinned Revision**: `fb2764a5cf321eaa5070ca8f9e892818f477c16d`
-- **Model Volume**: `endpoint-ep-hhM27zkXHw4l2a8c3fW1Bw` (contains all 48 safetensors shards)
-- **Base URL**: `https://inference.us-west.modal.direct/v1`
+`https://pmaclyman--ep-deepseek-v4-1-flash-shared-server.us-west.modal.direct/v1`
 
-### Endpoint CLI Commands
-```bash
-# List all endpoints in environment
-doppler run -- .\.venv\Scripts\modal.exe endpoint list --env main --json
+[SHARED-INFERENCE.md](SHARED-INFERENCE.md) records the live HTTP 200 completion, pricing, credentials, usage-limit change and credit eligibility boundaries. Shared usage is billed per token. It has no customer-owned GPU replica or idle scaledown tail.
 
-# Inspect weight cache volume
-doppler run -- .\.venv\Scripts\modal.exe volume ls endpoint-ep-hhM27zkXHw4l2a8c3fW1Bw
+The workspace was blocked at its $40 usage limit despite additional grant credit remaining. The limit is now $42. Additional grant eligibility for Shared tokens is unconfirmed; monthly included compute credits do not cover Shared usage.
 
-# Stop endpoint when finished to halt GPU compute consumption
-doppler run -- .\.venv\Scripts\modal.exe endpoint stop deepseek-v4-1-flash --env main
-
-# Check daily billing & credit deduction
-doppler run -- .\.venv\Scripts\modal.exe billing report --for today
-```
+The older Dedicated deployment `deepseek-v4-1-flash` was inactive with zero containers at inspection. It is historical infrastructure, not the active inference URL. Do not wake it for a Shared smoke test.
 
 ---
 
@@ -120,27 +109,13 @@ doppler run -- .\.venv\Scripts\modal.exe billing report --for today
 
 Follow this rigorous verification sequence to validate the integration layer-by-layer before publishing live comments.
 
-### Phase 0: Modal Endpoint Inference Ping
-Verify that the Dedicated Endpoint is active and responds to OpenAI-compatible chat completion requests.
+### Phase 0: Direct Shared Inference
 
-```bash
-doppler run -- node -e "
-const token = process.env.MODAL_PROXY_TOKEN;
-fetch('https://inference.us-west.modal.direct/v1/chat/completions', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer ' + token,
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    model: 'deepseek-v4-1-flash',
-    messages: [{ role: 'user', content: 'Respond with exactly: PONG' }],
-    max_tokens: 16
-  })
-}).then(r => r.json()).then(d => console.log('Response:', JSON.stringify(d, null, 2)));
-"
+```powershell
+doppler run --project ai-automation --config dev -- node scripts/inference-smoke.mjs
 ```
-**Pass Criteria**: HTTP 200, choices array contains completion text `PONG`.
+
+Pass criteria: HTTP 200 from the intended model, content `PONG`, and completion-token usage in `output/shared-smoke.json`. The script makes one bounded request with no retries. This does not require Docker, OpenCode or a PR review.
 
 ---
 

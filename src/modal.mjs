@@ -26,8 +26,8 @@ export function buildSessionId(owner, repo, prNumber, headSha) {
 export function renderOpenCodeConfig({
   templateContent,
   templatePath = DEFAULT_TEMPLATE_PATH,
-  baseUrl = 'https://inference.us-west.modal.direct/v1',
-  modelId = 'deepseek-v4-1-flash',
+  baseUrl = 'https://pmaclyman--ep-deepseek-v4-1-flash-shared-server.us-west.modal.direct/v1',
+  modelId = 'deepseek-ai/DeepSeek-V4.1-Flash',
   contextTokens = 131072,
   outputTokens = 16384,
   sessionId,

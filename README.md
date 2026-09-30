@@ -1,5 +1,10 @@
 # Docker + Modal Agentic PR Reviewer Spike
 
+## Current inference backend
+
+Shared DeepSeek V4.1 Flash is live and directly verified (HTTP 200, `PONG`, 3 output tokens). See [SHARED-INFERENCE.md](SHARED-INFERENCE.md) for the active URL, bounded smoke command, workspace usage-limit change and credit eligibility boundaries. Repository default changes are pending in [PR #1](https://github.com/Coldaine/docker-modal-pr-review/pull/1); the live Shared endpoint already works. Older Dedicated endpoint operations below are historical.
+
+
 An agentic GitHub Pull Request reviewer combining **Docker Cloud Sandboxes** (isolated microVM execution environments) and **Modal** (DeepSeek V4.1 Flash inference via Shared Endpoints) using **OpenCode**.
 
 Repository: [Coldaine/docker-modal-pr-review](https://github.com/Coldaine/docker-modal-pr-review)
