@@ -91,8 +91,8 @@ export async function executeController(options = {}) {
     dockerUsername = process.env.DOCKER_ID,
     dockerPat = process.env.DOCKER_PAT,
     modalProxyToken = process.env.MODAL_PROXY_TOKEN,
-    modelBaseUrl = process.env.MODEL_BASE_URL || 'https://inference.us-west.modal.direct/v1',
-    modelId = process.env.MODEL_ID || 'deepseek-v4-1-flash',
+    modelBaseUrl = process.env.MODEL_BASE_URL || 'https://pmaclyman--ep-deepseek-v4-1-flash-shared-server.us-west.modal.direct/v1',
+    modelId = process.env.MODEL_ID || 'deepseek-ai/DeepSeek-V4.1-Flash',
     modelContextTokens = Number(process.env.MODEL_CONTEXT_TOKENS || 131072),
     modelOutputTokens = Number(process.env.MODEL_OUTPUT_TOKENS || 16384),
   } = options;
@@ -284,7 +284,7 @@ export async function executeController(options = {}) {
         '--standalone',
         '--auto',
         '--format', 'json',
-        '--model', `modal/${modelId.split('/').pop()}`,
+        '--model', 'modal/deepseek-v4-1-flash',
         smokePrompt,
       ],
       { workingDir: '/workspace/repo', timeoutMs: 180_000 }
@@ -343,7 +343,7 @@ export async function executeController(options = {}) {
         '--standalone',
         '--auto',
         '--format', 'json',
-        '--model', `modal/${modelId.split('/').pop()}`,
+        '--model', 'modal/deepseek-v4-1-flash',
         reviewPrompt,
       ],
       { workingDir: '/workspace/repo', timeoutMs: 30 * 60 * 1000 }
