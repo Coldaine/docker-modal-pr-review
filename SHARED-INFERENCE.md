@@ -2,7 +2,7 @@
 
 ## Live service and repository state
 
-The Shared endpoint was created and directly verified on 2026-09-30. This branch updates the repository defaults; those code changes are pending merge to main. The live endpoint already serves inference independently of that merge.
+The Shared endpoint was created and directly verified on 2026-09-30. This branch updates the repository defaults; those code changes are pending in [PR #1](https://github.com/Coldaine/docker-modal-pr-review/pull/1). The live endpoint already serves inference independently of that merge.
 
 | Setting | Verified value |
 | --- | --- |

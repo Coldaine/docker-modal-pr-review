@@ -2,7 +2,7 @@
 
 ## Current inference backend
 
-Shared DeepSeek V4.1 Flash is live and directly verified (HTTP 200, `PONG`, 3 output tokens). See [SHARED-INFERENCE.md](SHARED-INFERENCE.md) for the active URL, bounded smoke command, workspace usage-limit change and credit eligibility boundaries. Repository default changes are pending merge; the live Shared endpoint already works. Older Dedicated endpoint operations below are historical.
+Shared DeepSeek V4.1 Flash is live and directly verified (HTTP 200, `PONG`, 3 output tokens). See [SHARED-INFERENCE.md](SHARED-INFERENCE.md) for the active URL, bounded smoke command, workspace usage-limit change and credit eligibility boundaries. Repository default changes are pending in [PR #1](https://github.com/Coldaine/docker-modal-pr-review/pull/1); the live Shared endpoint already works. Older Dedicated endpoint operations below are historical.
 
 
 This runbook documents the operational commands, credential configuration, step-by-step verification ladder, failure triage, and promotion path for the Docker Cloud Sandboxes + Modal DeepSeek V4.1 Flash PR reviewer spike.
